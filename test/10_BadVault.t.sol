@@ -3,6 +3,7 @@ pragma solidity ^0.8.15;
 
 import "forge-std/Test.sol";
 import {console2} from "forge-std/console2.sol";
+import {SymTest} from "halmos-cheatcodes/SymTest.sol";
 
 // inspired by the classic reentrancy level in Ethernaut CTF
 contract BadVault {
@@ -81,7 +82,7 @@ contract ExploitLaunchPad {
     }
 }
 
-contract BadVaultTest is Test {
+contract BadVaultTest is Test, SymTest {
     BadVault vault;
     ExploitLaunchPad exploit;
 
@@ -185,6 +186,10 @@ contract BadVaultTest is Test {
         bytes memory deferredData
 
     ) public {
+        // address target1 = svm.createAddress("target1");
+        // address target2 = svm.createAddress("target2");
+        // address deferredTarget = svm.createAddress("deferredTarget");
+
         uint256 STARTING_BALANCE = 2 ether;
         vm.deal(attacker, STARTING_BALANCE);
 
@@ -226,7 +231,7 @@ contract BadVaultTest is Test {
 
     // running `halmos --function test_BadVault_solution`
     // gives the expected `Counterexample: ∅`
-    //
+
     // running `forge test --match-test test_BadVault_solution -vvv` confirms the attack trace:                                                                                                                                                                            took 6s Node system at 18:00:43
     //   deposit 0x0000000000000000000000000000000000000001 1000000000000000000
     //   deposit 0x0000000000000000000000000000000000000002 1000000000000000000

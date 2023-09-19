@@ -2,3 +2,16 @@
 solc-version = "0.8.18"
 optimizer = false # faster compilation
 optimizer-runs = 10_000_000
+
+[fuzz]
+runs = 100_000
+
+[profile.smt.model_checker]
+engine = "chc"
+timeout = 100
+targets = [
+    "assert",
+]
+
+[profile.smt.model_checker.contracts]
+"~/projects/halmos-sandbox/test/21_monotonic.t.sol" = [ 'Monotonic' ]

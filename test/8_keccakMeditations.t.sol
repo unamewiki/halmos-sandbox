@@ -4,10 +4,8 @@ import "forge-std/Test.sol";
 
 contract KeccakMeditations is Test {
     // [PASS] test_keccakMeditations(uint256) (paths: 1/3, time: 0.04s, bounds: [])
-    function prove_keccakMeditations_uint256(uint256 x, uint256 y) external pure {
-        if (x == y) {
-            return;
-        }
+    function test_keccak_collision(uint256 x, uint256 y) external pure {
+        vm.assume(x != y);
 
         assert(
             keccak256(abi.encodePacked(x)) !=
