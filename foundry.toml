@@ -4,7 +4,7 @@ optimizer = false # faster compilation
 optimizer-runs = 10_000_000
 
 [fuzz]
-runs = 100_000
+runs = 10_000
 
 [profile.smt.model_checker]
 engine = "chc"

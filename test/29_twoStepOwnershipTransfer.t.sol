@@ -74,7 +74,8 @@ contract TwoStepOwnershipTest is Test {
         assertEq(owned.owner(), newOwner);
     }
 
-    function invariant_owner_never_changes_this_is_bad_lol() public {
+    function invariant_owner_never_changes_this_is_bad_lol() public returns(bool cond) {
+        cond = (owned.owner() == owner);
         assertEq(owned.owner(), owner);
     }
 
