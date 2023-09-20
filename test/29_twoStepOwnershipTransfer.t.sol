@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.15;
 import "forge-std/Test.sol";
+import {SymTest} from "halmos-cheatcodes/SymTest.sol";
 
 contract Owned {
     address public owner;
@@ -49,7 +50,7 @@ contract Handler is Test {
     }
 }
 
-contract TwoStepOwnershipTest is Test {
+contract TwoStepOwnershipTestFoundry is Test, SymTest {
     address owner;
     Owned owned;
     Handler handler;
@@ -78,19 +79,46 @@ contract TwoStepOwnershipTest is Test {
         cond = (owned.owner() == owner);
         assertEq(owned.owner(), owner);
     }
+}
 
+contract TwoStepOwnershipTestHalmos is Test, SymTest {
+    address owner;
+    Owned owned;
 
-    function bad_inductive_invariant() public view returns(bool) {
-        return owned.owner() == owner;
+    function setUp() public {
+        owner = address(this);
+        owned = new Owned();
     }
 
-    function check_bad_inductive_invariant(bytes memory call_data, address sender, uint256 msg_value) public {
-        assertTrue(bad_inductive_invariant());
+    function invariant_owner_never_changes_this_is_bad_lol() public returns(bool cond) {
+        cond = (owned.owner() == owner);
+        assertEq(owned.owner(), owner);
+    }
 
-        vm.deal(sender, msg_value);
-        vm.prank(sender);
-        address(owned).call{value: msg_value}(call_data);
+    // [FAIL] check_stateful_invariant(bytes4[]) (paths: 50/60, time: 5.96s, bounds: [|selectors|=2])
+    // Counterexample:
+    //     halmos_data_bytes_01 = 0xaaaa0000
+    //     halmos_msg_value_uint256_03 = 0x0
+    //     halmos_msg_value_uint256_06 = 0x0
+    //     halmos_sender_address_02 = 0xaaaa0001
+    //     halmos_sender_address_05 = 0xaaaa0000
+    //     p_selectors[0]_bytes4 = 0xf2fde38b00000000000000000000000000000000000000000000000000000000
+    //     p_selectors[1]_bytes4 = 0x79ba509700000000000000000000000000000000000000000000000000000000
+    // Symbolic test result: 0 passed; 1 failed; time: 6.09s
+    function check_stateful_invariant(bytes4[] calldata selectors) public {
+        for (uint256 i = 0; i < selectors.length; i++) {
+            bytes memory data = svm.createBytes(32, "data");
+            address sender = svm.createAddress("sender");
+            vm.assume(sender != address(0));
 
-        assertTrue(bad_inductive_invariant());
+            uint256 msg_value = svm.createUint(256, "msg_value");
+
+            vm.deal(sender, msg_value);
+            vm.prank(sender);
+            (bool succ, bytes memory ret) = address(owned).call{value: msg_value}(abi.encodePacked(selectors[i], data));
+            succ; ret; // silence warnings
+        }
+
+        invariant_owner_never_changes_this_is_bad_lol();
     }
 }
