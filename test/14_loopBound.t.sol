@@ -21,7 +21,8 @@ contract Test14 is Test {
         loopy = new Loopy();
     }
 
-    function test_loopBound(uint256 numTickets) public {
+    function prove_loopBound(uint256 numTickets) public {
         assertTrue(loopy.loop(numTickets));
     }
 }
+

@@ -50,13 +50,15 @@ contract Handler is Test {
     }
 }
 
-contract TwoStepOwnershipTestFoundry is Test, SymTest {
+contract TwoStepOwnershipTestFoundry is Test {
     address owner;
     Owned owned;
     Handler handler;
 
     function setUp() public {
-        owner = address(this);
+        owner = makeAddr("owner");
+
+        vm.prank(owner);
         owned = new Owned();
 
         handler = new Handler(owned);

@@ -57,4 +57,24 @@ contract SmolWETHTest is Test, SymTest {
         // alice's balance is updated
         assertEq(weth.balanceOf(alice), amount);
     }
+
+    function test_deposit_twice(address alice, uint128 amount1, uint128 amount2) external {
+        uint256 totalAmount = amount1 + amount2;
+
+        // fund alice
+        vm.deal(alice, totalAmount);
+
+        // 1st deposit
+        vm.prank(alice);
+        weth.deposit{value: amount1}();
+
+        // alice's balance is updated
+        assertEq(weth.balanceOf(alice), amount1);
+
+        // 2nd deposit
+        vm.prank(alice);
+        weth.deposit{value: amount2}();
+
+        assertEq(weth.balanceOf(alice), totalAmount);
+    }
 }
