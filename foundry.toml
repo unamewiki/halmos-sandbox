@@ -3,6 +3,8 @@ solc-version = "0.8.18"
 optimizer = false # faster compilation
 optimizer-runs = 10_000_000
 
+extra_output = ["storageLayout", "metadata"]
+
 [fuzz]
 runs = 10_000
 
