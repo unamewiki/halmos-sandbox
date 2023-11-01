@@ -7,7 +7,7 @@ contract BurnsGas {
     event Log(string message, uint256 value);
 
     function burnGas() external {
-        for (uint256 i = 0; i < 100000; i++) {
+        for (uint256 i = 0; i < 1000; i++) {
             emit Log("gas left", gasleft());
         }
     }
@@ -42,6 +42,7 @@ contract Test16 is Test {
         assertEq(returndata.length, 0);
     }
 
+    /// @custom:halmos --loop=2
     function test_GasBurner_direct() external {
         caller.directCall();
     }

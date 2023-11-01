@@ -352,11 +352,11 @@ contract VatTest is Test {
     uint256 constant RAD = 10 ** 45;
 
     function ray(uint256 wad) internal pure returns (uint256) {
-        return wad * RAY;
+        return wad * 10**9;
     }
 
     function rad(uint256 wad) internal pure returns (uint256) {
-        return wad * RAD;
+        return wad * 10**27;
     }
 
     function setUp() public {

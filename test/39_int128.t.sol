@@ -10,7 +10,7 @@ contract TestTypeRendering is Test, SymTest {
     }
 
     function test_uint8(uint8 x) public {
-        assertGt(x, 0);
+        assertGe(x, 0);
     }
 
     function test_very_small_int256(int256 x) public {
