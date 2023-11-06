@@ -163,4 +163,18 @@ contract Test47 is Test, SymTest {
         assertEq(set.length(), 1);
         assertEq(set.at(0), b);
     }
+
+
+    function test_keySet_searchForKeyToRemove() external {
+        bytes memory a = svm.createBytes(32, "a");
+        bytes memory b = svm.createBytes(32, "b");
+        vm.assume(keccak256(a) != keccak256(b));
+
+        set.add(a);
+        set.add(b);
+
+        bytes memory c = svm.createBytes(32, "c");
+        set.remove(c);
+        assertEq(set.length(), 2);
+    }
 }
