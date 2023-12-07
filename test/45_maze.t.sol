@@ -15,7 +15,7 @@ contract Test45 is Test {
         RIGHT
     }
 
-    bool constant DEBUG = true;
+    bool constant DEBUG = false;
     uint256 constant SAMPLE_RATE = 24;
     uint256 currentSample = SAMPLE_RATE;
 
